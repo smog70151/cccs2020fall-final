@@ -9,6 +9,9 @@ app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:xxxxx@localhost/db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(password)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+app.config['SQLALCHEMY_POOL_SIZE'] = 0
+app.config['SQLALCHEMY_MAX_OVERFLOW'] = -1
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -58,15 +61,42 @@ class Message(db.Model):
     UserName = db.Column(db.String(64))
     Messages = db.Column(db.Text)
     CreateDate = db.Column(db.DateTime)
+    RoomId = db.Column(db.String(64))
 
     def __init__(self,
                  user_name,
                  messages,
-                 create_date):
+                 create_date,
+                 room_id):
         self.UserName = user_name
         self.Messages = messages
         self.CreateDate = create_date
+        self.RoomId = room_id
 
+class Room(db.Model):
+    __tablename__ = 'Room'
+
+    Id = db.Column(db.Integer, primary_key=True)
+    Title = db.Column(db.String(64))
+    URL = db.Column(db.String(64))
+    UserID = db.Column(db.String(64))
+
+    def __init__(self,
+                 title,
+                 url,
+                 user_id):
+        self.Title = title
+        self.URL = url
+        self.UserID = user_id
+
+    @staticmethod
+    def md5(str_psw):
+        import hashlib
+        if not str_psw:
+            return None
+        else:
+            m = hashlib.md5(str_psw.encode(encoding='utf-8'))
+            return m.hexdigest()
 
 if __name__ == '__main__':
     manager.run()

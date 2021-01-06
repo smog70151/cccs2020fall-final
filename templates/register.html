@@ -1,112 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Example</title>
-    <!-- Three JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/threejs/r84/three.min.js"></script>
-    <!-- BS4 -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/component.css') }}" type="text/css"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/jquery.validate/jquery.validate.css') }}"
-          type="text/css"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-</head>
-<body>
+{% extends "layouts/navbar.html" %}
+{% block custom_head %}
+    <!-- jQuery -->
+    <script src='{{ url_for('static', filename='javascripts/jquery.min.js') }}'></script>
+    <script src='{{ url_for('static', filename='plugins/jquery.validate/jquery.validate.min.js') }}'></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/jquery.validate/jquery.validate.css') }}" type="text/css"/>
+{% endblock %}
 
-<div class="header jumbotron jumbotron-fluid">
-  <div class="container">
-    <h1 class="display-4">Register</h1>
-    <!--p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p-->
-  </div>
+{% block navbar_content %}
+<div class="container fill">
+        <div class="row justify-content-center h-100">
+            <div class="col-md-8 col-sm-12 text-center align-self-center header-bg header-text">
+    <div class="header jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Register</h1>
+      </div>
+    </div>
+
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-visitor-tab" data-toggle="tab" href="#visitor" role="tab" aria-controls="visitor" aria-selected="true">Visitor</a>
+            <a class="nav-item nav-link" id="nav-live-tab" data-toggle="tab" href="#live_host" role="tab" aria-controls="live_host" aria-selected="false">Live host</a>
+        </div>
+    </nav>
+
+    
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="visitor" role="tabpanel" aria-labelledby="nav-visitor-tab">
+          <div class="container">
+                <div class="shadow-none p-3 mb-5 bg-light rounded sub_header">Visitor</div>
+                <form action={{ url_for("register") }} method="POST">
+                    <p>{{ error }}</p>
+                    <div class="form-group label">
+                        <label for="InputUser">User Name</label>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="username">
+                    </div>
+                    <div class="form-group label">
+                        <label for="InputPassword">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="password">
+                    </div>
+                    <input type="hidden" name="role" value="visitor">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+            </div>
+      </div>
+      <div class="tab-pane fade" id="live_host" role="tabpanel" aria-labelledby="nav-live-tab">
+          <div class="container">
+                <div class="shadow-none p-3 mb-5 bg-light rounded sub_header">Live host</div>
+                <form action={{ url_for("register") }} method="POST">
+                    <p>{{ error }}</p>
+                    <div class="form-group label">
+                        <label for="InputUser">User Name</label>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="username">
+                    </div>
+                    <div class="form-group label">
+                        <label for="InputPassword">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="password">
+                    </div>
+                    <input type="hidden" name="role" value="host">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                    <!--button type="button" onclick="location.replace('/login')" class="btn btn-link">LOGIN</button-->
+                </form>
+            </div>
+      </div>
+    </div>
+</div>
+</div>
 </div>
 
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item" role="presentation">
-    <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#visitor" role="tab" aria-controls="home" aria-selected="true">Visitor</a>
-  </li>
-  <li class="nav-item" role="presentation">
-    <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#live_host" role="tab" aria-controls="profile" aria-selected="false">Live host</a>
-  </li>
-</ul>
-<div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="visitor" role="tabpanel" aria-labelledby="home-tab">
-      <div class="container">
-            <div class="shadow-none p-3 mb-5 bg-light rounded sub_header">Visitor</div>
-            <form action={{ url_for("register") }} method="POST">
-                <p>{{ error }}</p>
-                <div class="form-group label">
-                    <label for="InputUser">User Name</label>
-                    <input type="text" class="form-control" name="username" id="username" placeholder="username">
-                </div>
-                <div class="form-group label">
-                    <label for="InputPassword">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="password">
-                </div>
-                <input type="hidden" name="role" value="visitor">
-                <button type="submit" class="btn btn-primary">Register</button>
-                <!--button type="button" onclick="location.replace('/login')" class="btn btn-link">LOGIN</button-->
-            </form>
-        </div>
-  </div>
-  <div class="tab-pane fade" id="live_host" role="tabpanel" aria-labelledby="profile-tab">
-      <div class="container">
-            <div class="shadow-none p-3 mb-5 bg-light rounded sub_header">Live host</div>
-            <form action={{ url_for("register") }} method="POST">
-                <p>{{ error }}</p>
-                <div class="form-group label">
-                    <label for="InputUser">User Name</label>
-                    <input type="text" class="form-control" name="username" id="username" placeholder="username">
-                </div>
-                <div class="form-group label">
-                    <label for="InputPassword">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="password">
-                </div>
-                <input type="hidden" name="role" value="host">
-                <button type="submit" class="btn btn-primary">Register</button>
-                <!--button type="button" onclick="location.replace('/login')" class="btn btn-link">LOGIN</button-->
-            </form>
-        </div>
-  </div>
-</div>
-
-<script src='{{ url_for('static', filename='javascripts/jquery.min.js') }}'></script>
-<!--<script src='{{ url_for('static', filename='javascripts/bootstrap.min.js') }}'></script>-->
-<script src='{{ url_for('static', filename='plugins/jquery.validate/jquery.validate.min.js') }}'></script>
-<script>
-    $("form").validate({
-        rules: {
-            username: {
-                required: true,
-                UserNameExist: true
-            },
-            password: {
-                required: true
-            }
-        }
-    });
-    $.validator.addMethod('UserNameExist', function (value, element) {
-        var obj = {
-            username: $('#username').val().replace(/\s/g, "")
-        };
-        var data_json = JSON.stringify(obj);
-        var isSuccess = true;
-        $.ajax({
-            url: "/API_check_UserNameExist",
-            type: "POST",
-            data: data_json,
-            dataType: "json",
-            async: false,
-            contentType: "application/json",
-            success: function (data, textStatus, jqXHR) {
-                if (data == "exist") {
-                    isSuccess = false;
+    <script src='{{ url_for('static', filename='javascripts/jquery.min.js') }}'></script>
+    <!--<script src='{{ url_for('static', filename='javascripts/bootstrap.min.js') }}'></script>-->
+    <script src='{{ url_for('static', filename='plugins/jquery.validate/jquery.validate.min.js') }}'></script>
+    <script>
+        $("form").validate({
+            rules: {
+                username: {
+                    required: true,
+                    UserNameExist: true
+                },
+                password: {
+                    required: true
                 }
             }
         });
-        return isSuccess;
-    }, "UserName already exists.");
-</script>
-</body>
-</html>
+        $.validator.addMethod('UserNameExist', function (value, element) {
+            var obj = {
+                username: $('#username').val().replace(/\s/g, "")
+            };
+            var data_json = JSON.stringify(obj);
+            var isSuccess = true;
+            $.ajax({
+                url: "/API_check_UserNameExist",
+                type: "POST",
+                data: data_json,
+                dataType: "json",
+                async: false,
+                contentType: "application/json",
+                success: function (data, textStatus, jqXHR) {
+                    if (data == "exist") {
+                        isSuccess = false;
+                    }
+                }
+            });
+            return isSuccess;
+        }, "UserName already exists.");
+    </script>
+{% endblock %}
+{% block body_content %} 
+{% endblock %}

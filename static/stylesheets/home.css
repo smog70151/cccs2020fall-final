@@ -196,3 +196,15 @@
   text-align: center !important;
   margin: 0 auto;
 }
+
+.popup {
+  position: fixed;
+  top: 0;
+
+  border-radius:1%;
+  background-color: #6C6C6C;
+  font color:white;
+  opacity:0.9;
+  margin: 5%;
+  padding: 2%;
+}

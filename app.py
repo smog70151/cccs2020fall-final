@@ -1,7 +1,7 @@
 from flask import Flask, session, redirect, render_template, request, flash, url_for, json
 from flask_socketio import SocketIO, emit, join_room
 from flask_login import UserMixin, LoginManager, login_required, current_user, login_user, logout_user
-from dbModel import UserAccounts, Message, db
+from dbModel import UserAccounts, Message, Room, db
 from functools import wraps
 from PIL import Image
 from datetime import datetime
@@ -44,7 +44,6 @@ def query_user(username):
         return True
     return False
 
-
 @login_manager.user_loader
 def user_loader(username):
     if query_user(username):
@@ -57,25 +56,52 @@ def user_loader(username):
 @app.route('/')
 @app.route('/home', methods=['GET', 'POST'])
 def home():
+    rooms = Room.query.all()
+    room_dict = {}
+    room_list = []
+    for room in rooms:
+        room_dict['user_id'] = str(room.UserID)
+        room_dict['title'] = str(room.Title)
+        room_dict['room_id'] = Room.md5(room.Title + room.URL + room.UserID)
+        room_list.append(room_dict)
+    
     if current_user.is_authenticated:
         user = {}
-        user['name'] = 'Howhow'
-        user['role'] = 'Streamer'
+        user['name'] = session.get('user_id')
+        user['role'] = UserAccounts.query.filter_by(UserName=user['name']).first().Role
+    
     return render_template("home.html", **locals())
 
-@app.route('/index', methods=['GET'])
+@app.route('/channels', methods=['GET'])
+def channels():
+    rooms = Room.query.all()
+    room_dict = {}
+    room_list = []
+    for room in rooms:
+        room_dict['user_id'] = str(room.UserID)
+        room_dict['title'] = str(room.Title)
+        room_dict['room_id'] = Room.md5(room.Title + room.URL + room.UserID)
+        room_list.append(room_dict)
+
+    return render_template("channels.html", **locals())
+
+
+@app.route('/index/<room_id>', methods=['GET'])
+#@app.route('/index', methods=['GET','POST'])
 @login_required
-def index():
+def index(room_id):
+    print("room_id: ", room_id)
     user_id = session.get('user_id')
     message_data = db.session.query(
         Message,
         UserAccounts.MugShot
     ).join(
         UserAccounts,
-        UserAccounts.UserName == Message.UserName
-    ).all()
+        UserAccounts.UserName == Message.UserName,
+    ).filter(Message.RoomId == room_id).all()
 
     mug_shot_title = UserAccounts.query.filter_by(UserName=user_id).first().MugShot
+    role = UserAccounts.query.filter_by(UserName=user_id).first().Role
     messages_dic = {}
     messages_list = []
     for message in message_data:
@@ -84,10 +110,18 @@ def index():
         messages_dic['Messages'] = message.Message.Messages
         messages_dic['MugShot'] = message.MugShot
         messages_dic['CreateDate'] = message.Message.CreateDate.strftime('%H:%M')
+        messages_dic['RoomId'] = message.Message.RoomId
         messages_list.append(messages_dic)
         messages_dic = {}
-    return render_template("index.html", **locals())
 
+    youtube_url = request.args.get('url')
+    Title = request.args.get('Title')
+    RoomId = room_id
+    user = {}
+    user['name'] = user_id
+    user['role'] = role
+
+    return render_template("index.html", **locals())
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -97,7 +131,7 @@ def login():
         return render_template("login.html")
 
     if current_user.is_authenticated and query_user(user_id):
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
 
     username = request.form['username']
     user = UserAccounts.query.filter_by(UserName=username).first()
@@ -110,7 +144,7 @@ def login():
         user.id = username
         login_user(user, remember=True)
         flash('Logged in successfully')
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
     return render_template("login.html", error="username or password error")
 
 
@@ -124,8 +158,48 @@ def register():
     new_account = UserAccounts(user_name=username, password=password, mugshot="default.jpg", role=role)
     db.session.add(new_account)
     db.session.commit()
-    return redirect(url_for("index"))
+    return redirect(url_for("home"))
+'''
+@app.route('/info', methods=['GET', 'POST'])
+def info():
+    if request.method =='POST':
+        if request.values['send']=="Submit":
+            url = "https://www.youtube.com/embed/" + str(request.values['url'])
+            Title = request.values['title']
+            return redirect(url_for('index', url=url, Title=Title))
+    return render_template("info.html")
+'''
+@app.route('/create_room',methods=['POST'])
+@login_required
+def create_room():
+    if request.method == 'POST':
+        '''
+        db table create room
+        '''
+        user_id = session.get('user_id')
+        url_id = str(request.form['url'])
+        url = "https://www.youtube.com/embed/" + url_id
+        Title = request.form['title']
+        room_id = Room.md5(Title + url_id + user_id)
+        new_room = Room(title=Title,url=url_id,user_id=user_id)
+        db.session.add(new_room)
+        db.session.commit()
+        return redirect(url_for('index',room_id=room_id, url=url, Title=Title))
 
+@app.route('/del_room', methods=['POST'])
+@login_required
+def del_room():
+    if request.method == 'POST':
+        '''
+        db delete room
+        '''
+        user_id = session.get('user_id')
+
+        url = str(request.form['url']).split('/')[-1]
+        title = str(request.form['title'])
+        Room.query.filter_by(Title=title, URL=url, UserID=user_id).delete()
+        db.session.commit()
+        return redirect(url_for('home'))
 
 @app.route('/API_check_UserNameExist', methods=['POST'])
 @to_json
@@ -140,13 +214,13 @@ def api_check_user_name_exist():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
 
 @socketio.on('join')
 def join(message):
     join_room(message['room'])
-    print('join')
+    print('join: ', message['room'])
 
 
 @socketio.on('connect')
@@ -164,7 +238,8 @@ def send_inquiry(msg):
     data_message = Message(
         user_name=user_id,
         messages=msg['msg'],
-        create_date=create_date
+        create_date=create_date,
+        room_id = str(msg['room'])
     )
     db.session.add(data_message)
     db.session.commit()
@@ -174,6 +249,7 @@ def send_inquiry(msg):
         'Name': user_id,
         'PictureUrl': mug_shot,
         'msg': msg['msg'],
+        'Ad':msg['Ad']
     }
     emit('getInquiry', data, room=msg['room'])
 
@@ -245,15 +321,6 @@ def croppic():
         save_path = '{}/{}'.format(MugShot_FOLDER, mugshot)
         final_image.save(save_path)
 
-        #  The crop rectangle, as a (left, upper, right, lower)-tuple.
-        # box = (imgX1, imgY1, imgX1 + cropW, imgY1 + cropH)
-        # newImg = source_image.crop(box)
-        # imgByteArr = io.BytesIO()
-        # newImg.save(imgByteArr, format=image_format)
-        # imgByteArr = imgByteArr.getvalue()
-        # imgbase = base64.b64encode(imgByteArr).decode('utf-8')
-        # img_base64 = '{},{}'.format(title_head, imgbase)
-
         data = {
             'status': 'success',
             'url': '/{}/{}'.format(MugShot_PATH, mugshot),
@@ -268,4 +335,6 @@ def croppic():
 
 
 if __name__ == '__main__':
-    socketio.run(app)
+    app.config['TEMPLATES_AUTO_RELOAD'] = True      
+    app.jinja_env.auto_reload = True
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
