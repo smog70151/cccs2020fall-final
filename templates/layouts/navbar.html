@@ -12,6 +12,7 @@
   <!--  Personal -->
   <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/home.css') }}" type="text/css">
   <script src="{{ url_for('static', filename='javascripts/home.js') }}"></script>
+  {% block custom_head %}{% endblock %}
 {% endblock %}
 {% block navbar %}
 <!-- Navbar -->
@@ -35,30 +36,33 @@
           </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/login" id="login" role="button">
-              Login
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/register" id="register" role="button">
-              Register
-            </a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle js-scroll-trigger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {% if user %}
+					{% if user %}
+            <li class="nav-item nav-link">
               {{ user.name }}
-              {% endif %}
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item disabled" href="#"></a>
-              <a class="dropdown-item disabled" href="#"></a>
-              <a class="dropdown-item disabled" href="#"></a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item disabled" href="#"></a>
-            </div>
-          </li>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle js-scroll-trigger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" onclick="myFunction()">Stream</a>
+                <!--a class="dropdown-item" href="/stream"> Stream </a-->
+                <a class="dropdown-item" href="/info"> Info </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout"> Logout </a>
+              </div>
+            </li>
+					{% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="/login" id="login" role="button">
+                Login
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/register" id="register" role="button">
+                Register
+              </a>
+            </li>
+					{% endif %}
         </ul>
       </div>
     </div>

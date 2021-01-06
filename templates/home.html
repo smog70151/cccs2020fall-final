@@ -1,24 +1,77 @@
 {% extends "layouts/navbar.html"%}
-{% block navbar_content %}
-  {% if user %}
+{% block custom_head %}
 
-  {% else %}
-    <div class="container fill">
-      <div class="row justify-content-center h-100">
-        <div class="col-md-8 col-sm-12 text-center align-self-center header-bg header-text">
-          <br />
-          <h5>
-            Cloud Computing FALL
-          </h5>
-          <p>
-            r08921a07 曾梓豪 <br>
-            r08921a08 廖子毅 <br>
-            r09921a10 鄭翔予 <br>
-          </p>
-        </div>
-      </div>
-    </div>`
-  {% endif %}
+{% endblock %}
+{% block navbar_content %}
+	  <div class="container fill">
+		<div class="row justify-content-center h-100">
+		  <div class="col-md-8 col-sm-12 text-center align-self-center header-bg header-text">
+			<br />
+			<h5>
+			  Cloud Computing FALL
+			</h5>
+			<p>
+			  r08921a07 曾梓豪 <br>
+			  r08921a08 廖子毅 <br>
+			  r09921a10 鄭翔予 <br>
+			</p>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+	<!-- Streams -->
+	<div id="students">
+		<div class="container py-3">
+		<div class="row">
+		  <h4><i class="fas fa-graduation-cap"></i> Channel </h4>
+		</div>
+			<div class="row justify-content-around row-offset-2">
+				<!-- For Loop. -->
+				{% for room in room_list %}
+				<figure class="gallery_member col-md-2 col-sm-2 col-xs-5 filter hdpe">
+					<a href="{{url_for('index',room_id=room.room_id)}}"><img src="https://graph.facebook.com/v2.2/100012914590751/picture?type=large" class="img-thumbnail"></a>
+					<figcaption>
+					<h3> {{ room.title }} </h3>
+					<p>
+						{{ room.user_id }}
+					</p>
+					</figcaption>
+				</figure>
+				{% endfor %}
+			</div>
+	  </div>
+	  <div class="col-md-10 mx-auto">
+		<hr />
+	  </div>
+	</div>
+	<!--pop up for create room -->
+	<div class="container fill">
+	<div class="row justify-content-center h-100">
+  	<div class="popup" id="create_room_win" style=" display:none" Scrolling="yes">
+  		<input type="image" src="/static/images/close.png" onclick="myFunction()" style="width: 2%; float:right"/>
+		<form action="{{url_for('create_room')}}" method="POST">
+			<label for="url"><b>YouTube ID:</b></label>
+			<input type="text" name="url"><br><br>
+			<label for="title"><b>Title:</b></label>
+			<input type="text" name="title"><br><br>
+			<input type="submit" class="btn btn-dark" name="send" value="Submit">
+		</form>
+	</div>
+	</div>
+	</div>
+	<!--span class="popuptext" id="create_room_win">Popup text...</span-->
+	<script>
+		// When the user clicks on <div>, open the popup
+		function myFunction() {
+			var popup = document.getElementById("create_room_win");
+			if (popup.style.display === "none") {
+    			popup.style.display = "block";
+  			} else {
+    			popup.style.display = "none";
+  			}
+		}
+	</script>
 {% endblock %}
 {% block body_content %}
 {% endblock %}
