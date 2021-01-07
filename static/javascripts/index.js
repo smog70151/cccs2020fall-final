@@ -9,12 +9,14 @@ $(function () {
 
 
     var namespace = '';
+    console.log(namespace);
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
 
     socket.on('connect', function () {
         //console.log('connected!');
         var room_id = document.getElementsByClassName("room_id")[0].innerHTML;
         socket.emit('join', {room: room_id});
+        console.log('JOIN ROOM' + room_id);
     });
 
     function updateScrollbar() {
@@ -28,14 +30,14 @@ $(function () {
         $('<div class="timestamp">' + time + '</div>').appendTo($('.message:last'));
     }
 
-    function getQueryString(name) {  
-        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); 
-          
-        var r = window.location.search.substr(1).match(reg);  
-        if (r != null) {  
-            return unescape(r[2]);  
-        }  
-        return null;  
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }
+        return null;
     }
 
     function insertMessage() {
@@ -47,13 +49,13 @@ $(function () {
             return false;
         }
         //var RoomId = getQueryString('url').split("/").slice(-1)[0];
-        
+
         message_amount++;
         if (message_amount == 10){
             Ad = Math.random();
             message_amount=0;
         }
-        
+
         //console.log('send Inqueiry');
         var obj = {
             msg: msg,

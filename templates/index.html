@@ -1,118 +1,114 @@
 {% extends "layouts/navbar.html"%}
 {% block custom_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/normalize.css')}}" type="text/css" />
-    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Open+Sans'>
-    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.min.css'>
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css')}}" type="text/css" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/mystyle.css')}}" type="text/css" />
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='javascripts/plugins/croppic/assets/css/bootstrap.css') }}" type="text/css"/> -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='javascripts/plugins/croppic/assets/css/croppic.css') }}" type="text/css"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/font-awesome.min.css')}}" type="text/css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-    <style>
-    .videoWrapper {
-        position: relative;
-        padding-bottom: 56.25%; /* 16:9 */
-    }
-    .videoWrapper iframe {
-        position: absolute;
-        top: 20%;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-    .Ad {
+<link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.min.css'>
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css')}}" type="text/css" /> -->
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/mystyle.css')}}" type="text/css" /> -->
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='javascripts/plugins/croppic/assets/css/bootstrap.css') }}" type="text/css"/> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='javascripts/plugins/croppic/assets/css/croppic.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/font-awesome.min.css')}}" type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+<!-- Utils -->
+<script src="{{ url_for('static', filename='javascripts/jquery.min.js')}}"></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.concat.min.js'></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.min.js'></script>
+<script src="{{ url_for('static', filename='javascripts/bootstrap.min.js')}}"></script>
+<script src="{{ url_for('static', filename='javascripts/index.js')}}"></script>
+<script src="{{ url_for('static', filename='javascripts/plugins/croppic/croppic.min.js') }}"></script>
+<script src="{{ url_for('static', filename='javascripts/picture.js') }}"></script>
+
+<style>
+  .videoWrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+  }
+
+  .chatWrapper {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .videoWrapper iframe {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* .Ad {
         position: absolute;
         width: 100%;
         bottom: 0;
-    }
-    </style>
+    } */
+</style>
 {% endblock %}
 
 {% block navbar_content %}
 
-    <div class="container my-auto h-100">
-        <div class="row align-item-center h-100">
-            <div class="col-8 bg-dark">
-                <!-- NEW -->
-                <div class="row mt-3">
-                    <div class="col-2"  style="color:white;">
-                        <h3>{{ Title }}</h3>
-                    </div>
-                    <div class="col-2 offset-8 d-grid gap-2">
-                        <form action="{{url_for('del_room')}}" method="POST">
-                            <input type="hidden" name="title" value="{{ Title }}">
-                            <input type="hidden" name="url" value="{{ youtube_url }}">
-                            <input type="submit" class="btn btn-danger" name="send" value="Stop">
-                        </form>
-                    </div>
-                </div>
-                <!-- NEW -->
-                <div class="videoWrapper">
-                <!-- Copy & Pasted from YouTube -->
-                    <iframe src="{{ youtube_url+'?autoplay=1&mute=1'}}" frameborder="0" allowfullscreen></iframe>
-                    <!-- <iframe src="https://www.youtube.com/embed/0CYuKq23KSw" frameborder="0" allowfullscreen></iframe> -->
-                </div>
-                <div class="Ad">
-                    <h1 style="color:aqua" id="Ad">Advertisement</h1>
-                </div>
-            </div>
-            <div class="col-4 mx-0 px-0">
-            <div class="chat">
-              <div class="chat-title">
-                <h1>{{ current_user.id }}</h1>
-                <figure class="avatar">
-                  <img src="static/mugshot/{{ mug_shot_title }}" />
-                </figure>
-                <i class="fa fa-cog" type="button"  data-bs-toggle="modal" data-bs-target="#CroppicModal"></i>
-                
-                <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CroppicModal">
-                  Launch demo modal
-                </button>-->
-              </div>
-
-              <div class="messages">
-                <div class="messages-content">
-                    {% for data in messages_list %}
-                        <div class="message new"><figure class="avatar"><img src="static/mugshot/{{ data.MugShot }}"   alt="{{ data.UserName }}" title="{{ data.UserName }}"></figure>{{ data.Messages }}<div class="timestamp">{{ data.CreateDate }}</div></div>
-                    {% endfor %}
-                </div>
-              </div>
-              <div class="room_id">{{ RoomId }}</div>
-              <div class="message-box">
-                <textarea type="text" class="message-input" placeholder="Type message..."></textarea>
-                <button type="submit" class="message-submit">Send</button>
-              </div>
-            </div>
-            </div>
+<div class="container fill">
+  <div class="row justify-content-center h-100">
+    <div class="col-8 text-center align-self-center h-75">
+      <!-- NEW -->
+      <div class="row mt-3">
+        <div class="col-2" style="color:white;">
+          <h3>{{ Title }}</h3>
         </div>
+        <div class="col-2 offset-8 d-grid gap-2">
+          <form action="{{url_for('del_room')}}" method="POST">
+            <input type="hidden" name="title" value="{{ Title }}">
+            <input type="hidden" name="url" value="{{ youtube_url }}">
+            <input type="submit" class="btn btn-danger" name="send" value="Stop">
+          </form>
+        </div>
+      </div>
+      <!-- NEW -->
+      <div class="videoWrapper">
+        <!-- Copy & Pasted from YouTube -->
+        <iframe src="{{ youtube_url+'?autoplay=1&mute=1'}}" frameborder="0" allowfullscreen></iframe>
+        <!-- <iframe src="https://www.youtube.com/embed/0CYuKq23KSw" frameborder="0" allowfullscreen></iframe> -->
+      </div>
     </div>
-    <!-- <div class="bg"></div> -->
-            <div class="container">
-                <!-- Croppic Modal -->
-                <div class="modal fade" id="CroppicModal" role="dialog">
-                    <div class="modal-dialog">
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                <h4 class="modal-title">上傳大頭照</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div style="margin: auto" id="imgID"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="col-4 align-self-center h-75">
+      <div class="chat-title">
+        <div class="row mt-3">
+          <div class="col-2" style="color:white;">
+            <h3> {{ current_user.id }} </h3>
+          </div>
+        </div>
+        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CroppicModal">
+              Launch demo modal
+            </button>-->
+      </div>
+      <div class="videoWrapper">
+        <div class="chat chatWrapper">
+          <div class="messages h-100">
+            <div class="messages-content">
+              {% for data in messages_list %}
+              <div class="message new">
+                <figure class="avatar"><img src="static/mugshot/{{ data.MugShot }}" alt="{{ data.UserName }}" title="{{ data.UserName }}"></figure>{{ data.Messages }}
+                <div class="timestamp">{{ data.CreateDate }}</div>
+              </div>
+              {% endfor %}
             </div>
-    <script src="{{ url_for('static', filename='javascripts/jquery.min.js')}}"></script>
-    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.concat.min.js'></script>
-    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.min.js'></script>
-    <script src="{{ url_for('static', filename='javascripts/bootstrap.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='javascripts/index.js')}}"></script>
-    <script src="{{ url_for('static', filename='javascripts/plugins/croppic/croppic.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascripts/picture.js') }}"></script>
+          </div>
+          <div class="room_id">{{ RoomId }}</div>
+          <div class="message-box">
+            <textarea type="text" class="message-input" placeholder="Type message..."></textarea>
+            <button type="submit" class="message-submit">Send</button>
+          </div>
+          <img src="https://graph.facebook.com/v2.2/100012914590751/picture?type=large" class="img-thumbnail">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 {% block body_content %}
 {% endblock %}
