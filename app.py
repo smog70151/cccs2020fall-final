@@ -99,7 +99,6 @@ def index(room_id):
         UserAccounts,
         UserAccounts.UserName == Message.UserName,
     ).filter(Message.RoomId == room_id).all()
-
     mug_shot_title = UserAccounts.query.filter_by(UserName=user_id).first().MugShot
     role = UserAccounts.query.filter_by(UserName=user_id).first().Role
     messages_dic = {}
@@ -114,9 +113,10 @@ def index(room_id):
         messages_list.append(messages_dic)
         messages_dic = {}
 
-    youtube_url = request.args.get('url')
-    Title = request.args.get('Title')
-    RoomId = room_id
+    room = Room.query.filter_by(RoomID=room_id).first()#request.args.get('url')
+    youtube_url = "https://www.youtube.com/embed/" + room.URL
+    Title = room.Title#request.args.get('Title')
+    RoomId = room_id 
     user = {}
     user['name'] = user_id
     user['role'] = role
@@ -181,10 +181,11 @@ def create_room():
         url = "https://www.youtube.com/embed/" + url_id
         Title = request.form['title']
         room_id = Room.md5(Title + url_id + user_id)
-        new_room = Room(title=Title,url=url_id,user_id=user_id)
+        new_room = Room(title=Title,url=url_id,user_id=user_id,room_id=room_id)
         db.session.add(new_room)
         db.session.commit()
-        return redirect(url_for('index',room_id=room_id, url=url, Title=Title))
+        return redirect(url_for('index',room_id=room_id, youtube_url=url, Title=Title))
+        #return redirect(url_for('index',room_id=room_id), youtube_url=url, Title=Title)
 
 @app.route('/del_room', methods=['POST'])
 @login_required

@@ -80,14 +80,17 @@ class Room(db.Model):
     Title = db.Column(db.String(64))
     URL = db.Column(db.String(64))
     UserID = db.Column(db.String(64))
+    RoomID = db.Column(db.String(64))
 
     def __init__(self,
                  title,
                  url,
-                 user_id):
+                 user_id,
+                 room_id):
         self.Title = title
         self.URL = url
         self.UserID = user_id
+        self.RoomID = room_id
 
     @staticmethod
     def md5(str_psw):
