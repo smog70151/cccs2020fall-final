@@ -13,7 +13,7 @@
 <!-- Utils -->
 <script src="{{ url_for('static', filename='javascripts/jquery.min.js')}}"></script>
 <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.concat.min.js'></script>
-<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.min.js'></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.min.js'></script>
 <script src="{{ url_for('static', filename='javascripts/bootstrap.min.js')}}"></script>
 <script src="{{ url_for('static', filename='javascripts/index.js')}}"></script>
 <script src="{{ url_for('static', filename='javascripts/plugins/croppic/croppic.min.js') }}"></script>
@@ -41,11 +41,9 @@
     height: 100%;
   }
 
-  /* .Ad {
-        position: absolute;
-        width: 100%;
-        bottom: 0;
-    } */
+  .Ad {
+
+    }
 </style>
 {% endblock %}
 
@@ -87,7 +85,7 @@
       </div>
       <div class="videoWrapper">
         <div class="chat chatWrapper">
-          <div class="messages h-100">
+          <div class="messages h-100  overflow-auto">
             <div class="messages-content">
               {% for data in messages_list %}
               <div class="message new">
@@ -102,7 +100,9 @@
             <textarea type="text" class="message-input" placeholder="Type message..."></textarea>
             <button type="submit" class="message-submit">Send</button>
           </div>
-          <img src="https://graph.facebook.com/v2.2/100012914590751/picture?type=large" class="img-thumbnail">
+          <div id="Ad">
+            <img src="https://graph.facebook.com/v2.2/100012914590751/picture?type=large" class="img-thumbnail">
+          </div>
         </div>
       </div>
     </div>

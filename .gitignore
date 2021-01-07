@@ -90,3 +90,9 @@ ENV/
 
 # Mac
 .DS_Store
+
+# Database
+migrations/
+
+# Log
+*.log

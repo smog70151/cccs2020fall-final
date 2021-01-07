@@ -56,6 +56,7 @@ def user_loader(username):
 @app.route('/')
 @app.route('/home', methods=['GET', 'POST'])
 def home():
+    isLogin = False
     rooms = Room.query.all()
     room_dict = {}
     room_list = []
@@ -64,16 +65,18 @@ def home():
         room_dict['title'] = str(room.Title)
         room_dict['room_id'] = Room.md5(room.Title + room.URL + room.UserID)
         room_list.append(room_dict)
-    
+
     if current_user.is_authenticated:
+        isLogin = True
         user = {}
         user['name'] = session.get('user_id')
         user['role'] = UserAccounts.query.filter_by(UserName=user['name']).first().Role
-    
+
     return render_template("home.html", **locals())
 
 @app.route('/channels', methods=['GET'])
 def channels():
+    isLogin = False
     rooms = Room.query.all()
     room_dict = {}
     room_list = []
@@ -82,6 +85,12 @@ def channels():
         room_dict['title'] = str(room.Title)
         room_dict['room_id'] = Room.md5(room.Title + room.URL + room.UserID)
         room_list.append(room_dict)
+
+    if current_user.is_authenticated:
+        isLogin = True
+        user = {}
+        user['name'] = session.get('user_id')
+        user['role'] = UserAccounts.query.filter_by(UserName=user['name']).first().Role
 
     return render_template("channels.html", **locals())
 
@@ -116,15 +125,17 @@ def index(room_id):
     room = Room.query.filter_by(RoomID=room_id).first()#request.args.get('url')
     youtube_url = "https://www.youtube.com/embed/" + room.URL
     Title = room.Title#request.args.get('Title')
-    RoomId = room_id 
+    RoomId = room_id
     user = {}
     user['name'] = user_id
     user['role'] = role
+    isLogin = True
 
     return render_template("index.html", **locals())
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    isLogin = False
     user_id = session.get('user_id')
 
     if request.method == 'GET':
@@ -150,6 +161,7 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    isLogin = False
     if request.method == 'GET':
         return render_template("register.html")
     username = request.form['username']
@@ -336,6 +348,6 @@ def croppic():
 
 
 if __name__ == '__main__':
-    app.config['TEMPLATES_AUTO_RELOAD'] = True      
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.jinja_env.auto_reload = True
     socketio.run(app, host='0.0.0.0', port=5000, debug=True)
