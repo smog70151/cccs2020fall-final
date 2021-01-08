@@ -1,27 +1,32 @@
 {% extends "layouts/navbar.html" %}
 {% block custom_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/channels.css') }}" type="text/css">
 {% endblock %}
 
 {% block navbar_content %}
 <!-- TODO: Channel-List -->
 <div class="container fill" style="overflow:auto;">
 	<div class="row justify-content-center h-100">
-		<div class="col-md-8 col-sm-12 text-center align-self-center header-bg header-text">
-		{% for room in room_list %}
-			<!-- <figure class="gallery_member col-md-2 col-sm-2 col-xs-5 filter hdpe"> -->
-				<a href="{{url_for('index',room_id=room.room_id)}}"><img src="https://graph.facebook.com/v2.2/100012914590751/picture?type=large" class="img-thumbnail"></a>
-				<figcaption>
-				<h3> {{ room.title }} </h3>
-				<p>
-					{{ room.user_id }}
-				</p>
-				</figcaption>
-			<!-- </figure> -->
-		{% endfor %}
+		<div class="align-self-center">
+			<div class="grid">
+				{% for room in room_list %}
+				<figure class="effect-sadie">
+					<a href="{{url_for('index',room_id=room.room_id)}}">
+						<iframe src="{{ 'https://www.youtube.com/embed/nDcAlnvenzU'+'?autoplay=1&mute=1'}}" frameborder="0"></iframe>
+						<figcaption>
+							<h2> {{ room.title }} </h2>
+							<p>
+								{{ room.user_id }}
+							</p>
+						</figcaption>
+					</a>
+				</figure>
+				{% endfor %}
+			</div>
 		</div>
 	</div>
 </div>
 <!-- For Loop -->
 {% endblock %}
-{% block body_content %} 
+{% block body_content %}
 {% endblock %}
