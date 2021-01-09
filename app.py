@@ -78,10 +78,10 @@ def home():
 def channels():
     isLogin = False
     rooms = Room.query.all()
-    room_dict = {}
     room_list = []
     for room in rooms:
-        room_dict['user_id'] = str(room.UserID)
+        room_dict = {}
+		room_dict['user_id'] = str(room.UserID)
         room_dict['title'] = str(room.Title)
         room_dict['url'] = str(room.URL)
         room_dict['room_id'] = Room.md5(room.Title + room.URL + room.UserID)
