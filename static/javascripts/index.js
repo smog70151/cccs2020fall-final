@@ -71,7 +71,7 @@ $(function () {
         console.log(msg.Ad);
         console.log(msg.msg);
         document.getElementById('Ad').innerHTML = msg.Ad
-        $('<div class="message new"><figure class="avatar"><img src="/static/mugshot/' + msg.PictureUrl + '" /></figure>' + msg.msg + '</div>').appendTo($('.mCSB_container')).addClass('new');
+        $('<div class="message new row"><div class="col-2"><figure class="avatar"><img src="/static/mugshot/' + msg.PictureUrl + '" /></figure><div class="user-name">'+ msg.Name+'</div></div><div class=col><div class="text">' + msg.msg + '</div></div></div>').appendTo($('.mCSB_container')).addClass('new');
         setDate(msg.time);
         $('.message-input').val(null);
         updateScrollbar();
