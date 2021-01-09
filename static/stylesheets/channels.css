@@ -17,7 +17,7 @@
 	max-width: 480px;
 	max-height: 360px;
 	width: 48%;
-	background: #3085a3;
+	background: rgba(0,0,0,0.0);
 	text-align: center;
 	cursor: pointer;
 }
@@ -63,16 +63,15 @@
 	opacity: 0;
 }
 
-.grid figure h2 {
+.grid figure h3 {
 	word-spacing: -0.15em;
-	font-weight: 300;
 }
 
-.grid figure h2 span {
+.grid figure h3 span {
 	font-weight: 800;
 }
 
-.grid figure h2,
+.grid figure h3,
 .grid figure p {
 	margin: 0;
 }
@@ -167,7 +166,7 @@ figure.effect-sadie figcaption::before {
 	transform: translate3d(0,50%,0);
 }
 
-figure.effect-sadie h2 {
+figure.effect-sadie h3 {
 	position: absolute;
 	top: 50%;
 	left: 0;
@@ -196,7 +195,7 @@ figure.effect-sadie p {
 	transform: translate3d(0,10px,0);
 }
 
-figure.effect-sadie:hover h2 {
+figure.effect-sadie:hover h3 {
 	color: #fff;
 	-webkit-transform: translate3d(0,-50%,0) translate3d(0,-40px,0);
 	transform: translate3d(0,-50%,0) translate3d(0,-40px,0);
