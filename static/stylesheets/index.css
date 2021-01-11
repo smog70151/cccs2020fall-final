@@ -41,8 +41,8 @@
 }
 
 .avatar img {
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 105%;
 }
 
 .messages .message .text {
