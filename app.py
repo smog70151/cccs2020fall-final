@@ -128,6 +128,7 @@ def index(room_id):
     youtube_url = "https://www.youtube.com/embed/" + room.URL
     Title = room.Title#request.args.get('Title')
     RoomId = room_id
+    Room_host = room.UserID 
     user = {}
     user['name'] = user_id
     user['role'] = role
