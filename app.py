@@ -5,6 +5,7 @@ from dbModel import UserAccounts, Message, Room, db
 from functools import wraps
 from PIL import Image
 from datetime import datetime
+import requests
 import base64
 import os
 import uuid
@@ -258,13 +259,29 @@ def send_inquiry(msg):
     db.session.add(data_message)
     db.session.commit()
     mug_shot = UserAccounts.query.filter_by(UserName=user_id).first().MugShot
-    data = {
-        'time': create_date.strftime('%H:%M'),
-        'Name': user_id,
-        'PictureUrl': mug_shot,
-        'msg': msg['msg'],
-        'Ad':msg['Ad']
-    }
+    print (msg['spark_messages'])
+    if msg['spark_messages'] == None: 
+        data = {
+            'time': create_date.strftime('%H:%M'),
+            'Name': user_id,
+            'PictureUrl': mug_shot,
+            'msg': msg['msg'],
+            'Ad':msg['Ad']
+        }
+    else:
+        params = {}
+        for i in range(2):
+            params['{}'.format(i)] = msg['spark_messages'][i]
+        print (params)
+        res = requests.post(url='http://0.0.0.0:8080/get_ads', data=params)
+        data = {
+            'time': create_date.strftime('%H:%M'),
+            'Name': user_id,
+            'PictureUrl': mug_shot,
+            'msg': msg['msg'],
+            'Ad':msg['Ad']
+        }
+
     emit('getInquiry', data, room=msg['room'])
 
 

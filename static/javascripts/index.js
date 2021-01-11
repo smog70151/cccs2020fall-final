@@ -1,5 +1,7 @@
 var message_amount = 0;
 var Ad = 0;
+var spark_messages = [];
+var threshold = 2;
 $(function () {
     var $messages = $('.messages-content');
 
@@ -50,19 +52,25 @@ $(function () {
         }
         //var RoomId = getQueryString('url').split("/").slice(-1)[0];
 
-        message_amount++;
-        if (message_amount == 10){
-            Ad = Math.random();
-            message_amount=0;
-        }
-
         //console.log('send Inqueiry');
+        spark_messages.push(msg)
         var obj = {
             msg: msg,
             room: room_id,
             //RoomId: RoomId,
-            Ad: Ad
+            Ad: Ad,
+            spark_messages: spark_messages
         };
+
+        message_amount++;
+        if (message_amount == threshold) {
+            Ad = Math.random();
+            spark_messages = [];
+            message_amount = 0;
+        } else {
+            obj['spark_messages'] = null;
+        }
+        console.log('Send Message:' + obj);
         socket.emit('sendInquiry', obj);
     }
 
