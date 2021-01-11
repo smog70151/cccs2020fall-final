@@ -34,11 +34,13 @@
           <h3>{{ Title }}</h3>
         </div>
         <div class="col-2 offset-8 d-grid gap-2">
+          {% if Room_host == user.name %}
           <form action="{{url_for('del_room')}}" method="POST">
             <input type="hidden" name="title" value="{{ Title }}">
             <input type="hidden" name="url" value="{{ youtube_url }}">
             <input type="submit" class="btn btn-danger" name="send" value="Stop">
           </form>
+          {% endif %}
         </div>
       </div>
       <!-- NEW -->
