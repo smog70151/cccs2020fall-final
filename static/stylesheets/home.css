@@ -211,3 +211,11 @@ body {
   margin: 5%;
   padding: 2%;
 }
+
+.dropdown-item:hover {
+  cursor: pointer;
+}
+
+.nav-item.nav-link:hover {
+  cursor: pointer;
+}

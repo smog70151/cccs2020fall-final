@@ -1,0 +1,19 @@
+.warpper {
+	padding: 3%;
+}
+
+.jumbotron {
+  background-image: linear-gradient(to bottom,  #FF0080, #EAC100);
+}
+
+.label {
+	margin:2%;
+}
+
+.btn {
+	background:#FF0080;
+}
+
+.nav-link {
+	color:#EAC100;
+}

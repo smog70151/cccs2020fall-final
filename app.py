@@ -10,6 +10,7 @@ import base64
 import os
 import uuid
 import io
+import random
 
 MugShot_PATH = 'static/mugshot'
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -169,7 +170,8 @@ def register():
     username = request.form['username']
     password = request.form['password']
     role = True if request.form['role'] == "host" else False
-    new_account = UserAccounts(user_name=username, password=password, mugshot="default.jpg", role=role)
+    mugshot = "default_{}.png".format(str(random.randint(1,9)))
+    new_account = UserAccounts(user_name=username, password=password, mugshot=mugshot, role=role)
     db.session.add(new_account)
     db.session.commit()
     return redirect(url_for("home"))
