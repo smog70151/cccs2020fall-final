@@ -26,6 +26,32 @@
 		</div>
 	</div>
 </div>
+<!--pop up for create room -->
+<div class="container fill">
+	<div class="row justify-content-center h-100">
+		<div class="popup" id="create_room_win" style=" display:none" Scrolling="yes">
+			<input type="image" src="/static/images/close.png" onclick="myFunction()" style="width: 2%; float:right" />
+			<form action="{{url_for('create_room')}}" method="POST">
+				<label for="url"><b>YouTube ID:</b></label>
+				<input type="text" name="url"><br><br>
+				<label for="title"><b>Title:</b></label>
+				<input type="text" name="title"><br><br>
+				<input type="submit" class="btn btn-dark" name="send" value="Submit">
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	// When the user clicks on <div>, open the popup
+	function myFunction() {
+		var popup = document.getElementById("create_room_win");
+		if (popup.style.display === "none") {
+			popup.style.display = "block";
+		} else {
+			popup.style.display = "none";
+		}
+	}
+</script>
 <!-- For Loop -->
 {% endblock %}
 {% block body_content %}
