@@ -12,38 +12,21 @@
         <div class="row justify-content-center h-100">
             <div class="col-md-8 col-sm-12 text-center align-self-center header-bg header-text warpper">
 
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="visitor" role="tabpanel" aria-labelledby="nav-visitor-tab">
-                    <div class="container">
-                        <div class="header jumbotron jumbotron-fluid">
-                            <div class="container">
-                                <h1 class="display-4">Visitor</h1>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="live_host" role="tabpanel" aria-labelledby="nav-live-tab">
-                    <div class="container">
-                        <div class="header jumbotron jumbotron-fluid">
-                            <div class="container">
-                                <h1 class="display-4">Streamer</h1>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <nav>
+            <nav style="margin-bottom: 5%;">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="nav-visitor-tab" data-toggle="tab" href="#visitor" role="tab" aria-controls="visitor" aria-selected="true">Visitor</a>
                     <a class="nav-item nav-link" id="nav-live-tab" data-toggle="tab" href="#live_host" role="tab" aria-controls="live_host" aria-selected="false">Live host</a>
                 </div>
             </nav>
-
     
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="visitor" role="tabpanel" aria-labelledby="nav-visitor-tab">
                   <div class="container">
+                        <div class="header jumbotron jumbotron-fluid">
+                            <div class="container">
+                                <h1 class="display-4">Visitor</h1>
+                            </div>
+                        </div>
                         <form action={{ url_for("register") }} method="POST">
                             <p>{{ error }}</p>
                             <div class="form-group label">
@@ -61,6 +44,11 @@
                 </div>
                 <div class="tab-pane fade" id="live_host" role="tabpanel" aria-labelledby="nav-live-tab">
                   <div class="container">
+                        <div class="header jumbotron jumbotron-fluid">
+                            <div class="container">
+                                <h1 class="display-4">Streamer</h1>
+                            </div>
+                        </div>
                         <form action={{ url_for("register") }} method="POST">
                             <p>{{ error }}</p>
                             <div class="form-group label">
