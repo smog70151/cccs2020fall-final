@@ -133,7 +133,8 @@
 }
 
 .Ad {
-
+  display: block !important;
+  width: 100%;
 }
 
 .room_id {

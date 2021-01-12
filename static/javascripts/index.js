@@ -79,7 +79,12 @@ $(function () {
         console.log(msg.Ad);
         console.log(msg.msg);
         if (msg.Ad != 'none') {
-            document.getElementById('Ad').innerHTML = msg.Ad
+            console.log('[Pred]' + msg.Ad);
+            /* document.getElementById('Ad').innerHTML = msg.Ad */;
+            /* document.getElementById('Ad').innerHTML = "<img src=\"/static/images/ad/ad_1_0.png\">"; */
+            document.getElementById('Ad').src = "/static/images/ad/ad_" + msg.Ad + "_0.png";
+            document.getElementById('Ad2').src = "/static/images/ad/ad_" + msg.Ad + "_1.png";
+            document.getElementById('Ad3').src = "/static/images/ad/ad_" + msg.Ad + "_2.png";
         }
         $('<div class="message new row"><div class="col-2"><figure class="avatar"><img src="/static/mugshot/' + msg.PictureUrl + '" /></figure><div class="user-name">'+ msg.Name+'</div></div><div class=col><div class="text">' + msg.msg + '</div></div></div>').appendTo($('.mCSB_container')).addClass('new');
         setDate(msg.time);
