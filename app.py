@@ -5,6 +5,7 @@ from dbModel import UserAccounts, Message, Room, db
 from functools import wraps
 from PIL import Image
 from datetime import datetime
+from google_trans_new import google_translator
 import requests
 import base64
 import os
@@ -27,6 +28,8 @@ login_manager.login_message_category = "info"
 
 socketio = SocketIO(app)
 async_mode = "eventlet"
+
+translator = google_translator()
 
 class User(UserMixin):
     pass
@@ -274,7 +277,7 @@ def send_inquiry(msg):
     else:
         params = {}
         for i in range(2):
-            params['{}'.format(i)] = msg['spark_messages'][i]
+            params['{}'.format(i)] = translator.translate(msg['spark_messages'][i],lang_tgt='en')
         res = requests.post(url='http://0.0.0.0:8080/get_ads', data=params)
         print ('[Prediction]: ', res.json()['data'])
         data = {
