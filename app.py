@@ -269,20 +269,20 @@ def send_inquiry(msg):
             'Name': user_id,
             'PictureUrl': mug_shot,
             'msg': msg['msg'],
-            'Ad':msg['Ad']
+            'Ad': 'none'
         }
     else:
         params = {}
         for i in range(2):
             params['{}'.format(i)] = msg['spark_messages'][i]
-        print (params)
         res = requests.post(url='http://0.0.0.0:8080/get_ads', data=params)
+        print ('[Prediction]: ', res.json()['data'])
         data = {
             'time': create_date.strftime('%H:%M'),
             'Name': user_id,
             'PictureUrl': mug_shot,
             'msg': msg['msg'],
-            'Ad':msg['Ad']
+            'Ad':res.json()['data']
         }
 
     emit('getInquiry', data, room=msg['room'])
