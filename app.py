@@ -105,7 +105,6 @@ def channels():
 #@app.route('/index', methods=['GET','POST'])
 @login_required
 def index(room_id):
-    print("room_id: ", room_id)
     user_id = session.get('user_id')
     message_data = db.session.query(
         Message,
@@ -132,7 +131,7 @@ def index(room_id):
     youtube_url = "https://www.youtube.com/embed/" + room.URL
     Title = room.Title#request.args.get('Title')
     RoomId = room_id
-    Room_host = room.UserID 
+    Room_host = room.UserID
     user = {}
     user['name'] = user_id
     user['role'] = role
@@ -241,7 +240,6 @@ def logout():
 @socketio.on('join')
 def join(message):
     join_room(message['room'])
-    print('join: ', message['room'])
 
 
 @socketio.on('connect')
@@ -265,8 +263,7 @@ def send_inquiry(msg):
     db.session.add(data_message)
     db.session.commit()
     mug_shot = UserAccounts.query.filter_by(UserName=user_id).first().MugShot
-    print (msg['spark_messages'])
-    if msg['spark_messages'] == None: 
+    if msg['spark_messages'] == None:
         data = {
             'time': create_date.strftime('%H:%M'),
             'Name': user_id,
@@ -279,7 +276,6 @@ def send_inquiry(msg):
         for i in range(2):
             params['{}'.format(i)] = translator.translate(msg['spark_messages'][i],lang_tgt='en')
         res = requests.post(url='http://0.0.0.0:8080/get_ads', data=params)
-        print ('[Prediction]: ', res.json()['data'])
         data = {
             'time': create_date.strftime('%H:%M'),
             'Name': user_id,
@@ -374,4 +370,4 @@ def croppic():
 if __name__ == '__main__':
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.jinja_env.auto_reload = True
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
+    socketio.run(app, host='0.0.0.0', port=5000, debug=False)
